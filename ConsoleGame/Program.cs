@@ -10,19 +10,63 @@ namespace ConsoleGame
             Console.Write(c);
         }
 
+        static void DrawBorders(int boardWidth, int boardHeight)
+        {
+            for (int i = 0; i < boardWidth + 2; i++)
+            {
+                Draw(i, 0, '*');
+                Draw(i, boardHeight + 1, '*');
+            }
+
+            for (int i = 0; i < boardHeight; i++)
+            {
+                Draw(0, i + 1, '*');
+                Draw(boardWidth + 1, i + 1, '*');
+            }
+        }
+
+        static char GetSymbol(int number)
+        {
+            // 0 - Empty
+            // 1 - Player
+            // 2 - Obstacle
+            // 3 - Bonus
+            // 4 - Enemy
+            switch (number)
+            {
+                case 0:
+                    return ' ';
+                case 1:
+                    return 'P';
+                case 2:
+                    return '*';
+                case 3:
+                    return 'B';
+                case 4:
+                    return 'E';
+                default:
+                    return ' ';
+            }
+        }
+
         static void Main(string[] args)
         {
             int boardWidth = 30;
             int boardHeight = 20;
             int[,] board = new int[boardHeight, boardWidth];
 
-            for(int i = 0; i < boardHeight; i++)
+            DrawBorders(boardWidth, boardHeight);
+            Console.CursorVisible = false;
+
+            for (int i = 0; i < boardHeight; i++)
             {
-                for(int j = 0; j < boardWidth; j++)
+                for (int j = 0; j < boardWidth; j++)
                 {
-                    Draw(i + 1, j + 1, board[i, j].ToString()[0]);
+                    Draw(j + 1, i + 1, GetSymbol(board[i, j]));
                 }
             }
+
+            Console.ReadKey();
         }
     }
 }
