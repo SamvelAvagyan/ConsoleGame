@@ -53,10 +53,16 @@ namespace ConsoleGame
         {
             int boardWidth = 30;
             int boardHeight = 20;
+            int startLeft = boardWidth / 2;
+            int startTop = boardHeight / 2;
             int[,] board = new int[boardHeight, boardWidth];
 
-            DrawBorders(boardWidth, boardHeight);
             Console.CursorVisible = false;
+
+            DrawBorders(boardWidth, boardHeight);
+
+            // Define player
+            board[startTop, startLeft] = 1;
 
             for (int i = 0; i < boardHeight; i++)
             {
