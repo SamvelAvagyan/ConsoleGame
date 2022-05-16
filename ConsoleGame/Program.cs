@@ -81,7 +81,33 @@ namespace ConsoleGame
 
             DrawBoard(board);
 
-            Console.ReadKey();
+            do
+            {
+                var input = Console.ReadKey();
+                board[currentTop, currentLeft] = 0;
+
+                switch (input.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        currentTop--;
+                        break;
+                    case ConsoleKey.DownArrow:
+                        currentTop++;
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        currentLeft--;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        currentLeft++;
+                        break;
+                    default:
+                        break;
+                }
+
+                board[currentTop, currentLeft] = 1;
+                DrawBoard(board);
+
+            } while (true);
         }
     }
 }
