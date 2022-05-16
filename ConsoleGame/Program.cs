@@ -4,7 +4,7 @@ namespace ConsoleGame
 {
     class Program
     {
-        static void Draw(int left, int top, char c)
+        static void DrawXY(int left, int top, char c)
         {
             Console.SetCursorPosition(left, top);
             Console.Write(c);
@@ -14,17 +14,30 @@ namespace ConsoleGame
         {
             for (int i = 0; i < boardWidth + 2; i++)
             {
-                Draw(i, 0, '*');
-                Draw(i, boardHeight + 1, '*');
+                DrawXY(i, 0, '*');
+                DrawXY(i, boardHeight + 1, '*');
             }
 
             for (int i = 0; i < boardHeight; i++)
             {
-                Draw(0, i + 1, '*');
-                Draw(boardWidth + 1, i + 1, '*');
+                DrawXY(0, i + 1, '*');
+                DrawXY(boardWidth + 1, i + 1, '*');
             }
         }
 
+        static void DrawBoard(int[,] board)
+        {
+            int boardHeight = board.GetLength(0);
+            int boardWidth = board.GetLength(1);
+
+            for (int i = 0; i < boardHeight; i++)
+            {
+                for (int j = 0; j < boardWidth; j++)
+                {
+                    DrawXY(j + 1, i + 1, GetSymbol(board[i, j]));
+                }
+            }
+        }
         static char GetSymbol(int number)
         {
             // 0 - Empty
@@ -55,6 +68,8 @@ namespace ConsoleGame
             int boardHeight = 20;
             int startLeft = boardWidth / 2;
             int startTop = boardHeight / 2;
+            int currentTop = startTop;
+            int currentLeft = startLeft;
             int[,] board = new int[boardHeight, boardWidth];
 
             Console.CursorVisible = false;
@@ -62,15 +77,9 @@ namespace ConsoleGame
             DrawBorders(boardWidth, boardHeight);
 
             // Define player
-            board[startTop, startLeft] = 1;
+            board[currentTop, currentLeft] = 1;
 
-            for (int i = 0; i < boardHeight; i++)
-            {
-                for (int j = 0; j < boardWidth; j++)
-                {
-                    Draw(j + 1, i + 1, GetSymbol(board[i, j]));
-                }
-            }
+            DrawBoard(board);
 
             Console.ReadKey();
         }
