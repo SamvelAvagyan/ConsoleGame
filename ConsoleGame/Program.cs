@@ -36,7 +36,20 @@ namespace ConsoleGame
             {
                 for (int j = 0; j < boardWidth; j++)
                 {
-                    DrawXY(j + 1, i + 1, GetSymbol(board[i, j]));
+                    char symbol = GetSymbol(board[i, j]);
+                    switch (symbol)
+                    {
+                        case 'B':
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            break;
+                        case 'P':
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            break;
+                    }
+
+                    DrawXY(j + 1, i + 1, symbol);
+
+                    Console.ResetColor();
                 }
             }
 
@@ -108,6 +121,13 @@ namespace ConsoleGame
             board[currentTop, currentLeft] = 1;
         }
 
+        static void CreateBonus(int[,] board)
+        {
+            int boardHeight = board.GetLength(0);
+            int boardWidth = board.GetLength(1);
+            board[random.Next(0, boardHeight), random.Next(0, boardWidth)] = 3;
+        }
+
         static void CreateObstacles(int[,] board, int count)
         {
             int boardHeight = board.GetLength(0);
@@ -135,6 +155,7 @@ namespace ConsoleGame
             DrawBorders(boardWidth, boardHeight);
 
             CreateObstacles(board, obstacleCount);
+            CreateBonus(board);
 
             // Define player
             board[currentTop, currentLeft] = 1;
