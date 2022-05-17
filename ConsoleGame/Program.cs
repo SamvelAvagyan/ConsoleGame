@@ -78,25 +78,25 @@ namespace ConsoleGame
             switch (input.Key)
             {
                 case ConsoleKey.UpArrow:
-                    if (currentTop > 0)
+                    if (currentTop > 0 && board[currentTop - 1, currentLeft] != 2)
                     {
                         currentTop--;
                     }
                     break;
                 case ConsoleKey.DownArrow:
-                    if (currentTop < boardHeight - 1)
+                    if (currentTop < boardHeight - 1 && board[currentTop + 1, currentLeft] != 2)
                     {
                         currentTop++;
                     }
                     break;
                 case ConsoleKey.LeftArrow:
-                    if (currentLeft > 0)
+                    if (currentLeft > 0 && board[currentTop, currentLeft - 1] != 2)
                     {
                         currentLeft--;
                     }
                     break;
                 case ConsoleKey.RightArrow:
-                    if (currentLeft < boardWidth - 1)
+                    if (currentLeft < boardWidth - 1 && board[currentTop, currentLeft + 1] != 2) 
                     {
                         currentLeft++;
                     }
