@@ -9,7 +9,6 @@ namespace ConsoleGame
             Console.SetCursorPosition(left, top);
             Console.Write(c);
         }
-
         static void DrawBorders(int boardWidth, int boardHeight)
         {
             for (int i = 0; i < boardWidth + 2; i++)
@@ -24,7 +23,6 @@ namespace ConsoleGame
                 DrawXY(boardWidth + 1, i + 1, '*');
             }
         }
-
         static void DrawBoard(int[,] board)
         {
             int boardHeight = board.GetLength(0);
@@ -37,6 +35,8 @@ namespace ConsoleGame
                     DrawXY(j + 1, i + 1, GetSymbol(board[i, j]));
                 }
             }
+
+            Console.SetCursorPosition(10, 10);
         }
         static char GetSymbol(int number)
         {
@@ -61,6 +61,31 @@ namespace ConsoleGame
                     return ' ';
             }
         }
+        static void Update(int [,] board, ref int currentLeft, ref int currentTop)
+        {
+            var input = Console.ReadKey();
+            board[currentTop, currentLeft] = 0;
+
+            switch (input.Key)
+            {
+                case ConsoleKey.UpArrow:
+                    currentTop--;
+                    break;
+                case ConsoleKey.DownArrow:
+                    currentTop++;
+                    break;
+                case ConsoleKey.LeftArrow:
+                    currentLeft--;
+                    break;
+                case ConsoleKey.RightArrow:
+                    currentLeft++;
+                    break;
+                default:
+                    break;
+            }
+
+            board[currentTop, currentLeft] = 1;
+        }
 
         static void Main(string[] args)
         {
@@ -83,28 +108,7 @@ namespace ConsoleGame
 
             do
             {
-                var input = Console.ReadKey();
-                board[currentTop, currentLeft] = 0;
-
-                switch (input.Key)
-                {
-                    case ConsoleKey.UpArrow:
-                        currentTop--;
-                        break;
-                    case ConsoleKey.DownArrow:
-                        currentTop++;
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        currentLeft--;
-                        break;
-                    case ConsoleKey.RightArrow:
-                        currentLeft++;
-                        break;
-                    default:
-                        break;
-                }
-
-                board[currentTop, currentLeft] = 1;
+                Update(board, ref currentLeft, ref currentTop);
                 DrawBoard(board);
 
             } while (true);
