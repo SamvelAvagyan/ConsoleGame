@@ -4,11 +4,14 @@ namespace ConsoleGame
 {
     class Program
     {
+        private static Random random = new Random();
+
         static void DrawXY(int left, int top, char c)
         {
             Console.SetCursorPosition(left, top);
             Console.Write(c);
         }
+
         static void DrawBorders(int boardWidth, int boardHeight)
         {
             for (int i = 0; i < boardWidth + 2; i++)
@@ -23,6 +26,7 @@ namespace ConsoleGame
                 DrawXY(boardWidth + 1, i + 1, '*');
             }
         }
+
         static void DrawBoard(int[,] board)
         {
             int boardHeight = board.GetLength(0);
@@ -38,6 +42,7 @@ namespace ConsoleGame
 
             Console.SetCursorPosition(10, 10);
         }
+
         static char GetSymbol(int number)
         {
             // 0 - Empty
@@ -61,7 +66,8 @@ namespace ConsoleGame
                     return ' ';
             }
         }
-        static void Update(int [,] board, ref int currentLeft, ref int currentTop)
+
+        static void Update(int[,] board, ref int currentLeft, ref int currentTop)
         {
             int boardHeight = board.GetLength(0);
             int boardWidth = board.GetLength(1);
@@ -102,6 +108,17 @@ namespace ConsoleGame
             board[currentTop, currentLeft] = 1;
         }
 
+        static void CreateObstacles(int[,] board, int count)
+        {
+            int boardHeight = board.GetLength(0);
+            int boardWidth = board.GetLength(1);
+
+            for (int i = 0; i < count; i++)
+            {
+                board[random.Next(0, boardHeight), random.Next(0, boardWidth)] = 2;
+            }
+        }
+
         static void Main(string[] args)
         {
             int boardWidth = 30;
@@ -110,11 +127,14 @@ namespace ConsoleGame
             int startTop = boardHeight / 2;
             int currentTop = startTop;
             int currentLeft = startLeft;
+            int obstacleCount = 10;
             int[,] board = new int[boardHeight, boardWidth];
 
             Console.CursorVisible = false;
 
             DrawBorders(boardWidth, boardHeight);
+
+            CreateObstacles(board, obstacleCount);
 
             // Define player
             board[currentTop, currentLeft] = 1;
@@ -125,7 +145,6 @@ namespace ConsoleGame
             {
                 Update(board, ref currentLeft, ref currentTop);
                 DrawBoard(board);
-
             } while (true);
         }
     }
