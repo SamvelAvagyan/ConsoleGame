@@ -63,22 +63,37 @@ namespace ConsoleGame
         }
         static void Update(int [,] board, ref int currentLeft, ref int currentTop)
         {
+            int boardHeight = board.GetLength(0);
+            int boardWidth = board.GetLength(1);
+
             var input = Console.ReadKey();
             board[currentTop, currentLeft] = 0;
 
             switch (input.Key)
             {
                 case ConsoleKey.UpArrow:
-                    currentTop--;
+                    if (currentTop > 0)
+                    {
+                        currentTop--;
+                    }
                     break;
                 case ConsoleKey.DownArrow:
-                    currentTop++;
+                    if (currentTop < boardHeight - 1)
+                    {
+                        currentTop++;
+                    }
                     break;
                 case ConsoleKey.LeftArrow:
-                    currentLeft--;
+                    if (currentLeft > 0)
+                    {
+                        currentLeft--;
+                    }
                     break;
                 case ConsoleKey.RightArrow:
-                    currentLeft++;
+                    if (currentLeft < boardWidth - 1)
+                    {
+                        currentLeft++;
+                    }
                     break;
                 default:
                     break;
