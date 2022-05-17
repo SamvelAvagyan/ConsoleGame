@@ -80,6 +80,13 @@ namespace ConsoleGame
             }
         }
 
+        static void BonusEatSound()
+        {
+            Console.Beep(100, 100);
+            Console.Beep(200, 100);
+            Console.Beep(300, 200);
+        }
+
         static void Update(int[,] board, ref int currentLeft, ref int currentTop)
         {
             int boardHeight = board.GetLength(0);
@@ -91,24 +98,48 @@ namespace ConsoleGame
             switch (input.Key)
             {
                 case ConsoleKey.UpArrow:
+                    if(board[currentTop - 1, currentLeft] == 3)
+                    {
+                        CreateBonus(board);
+                        BonusEatSound();
+                    }
+
                     if (currentTop > 0 && board[currentTop - 1, currentLeft] != 2)
                     {
                         currentTop--;
                     }
                     break;
                 case ConsoleKey.DownArrow:
+                    if (board[currentTop + 1, currentLeft] == 3)
+                    {
+                        CreateBonus(board);
+                        BonusEatSound();
+                    }
+
                     if (currentTop < boardHeight - 1 && board[currentTop + 1, currentLeft] != 2)
                     {
                         currentTop++;
                     }
                     break;
                 case ConsoleKey.LeftArrow:
+                    if (board[currentTop, currentLeft - 1] == 3)
+                    {
+                        CreateBonus(board);
+                        BonusEatSound();
+                    }
+
                     if (currentLeft > 0 && board[currentTop, currentLeft - 1] != 2)
                     {
                         currentLeft--;
                     }
                     break;
                 case ConsoleKey.RightArrow:
+                    if (board[currentTop, currentLeft + 1] == 3)
+                    {
+                        CreateBonus(board);
+                        BonusEatSound();
+                    }
+
                     if (currentLeft < boardWidth - 1 && board[currentTop, currentLeft + 1] != 2) 
                     {
                         currentLeft++;
