@@ -12,12 +12,19 @@ namespace ConsoleGame
         private static int currentTop = startTop;
         private static int currentLeft = startLeft;
         private static int obstacleCount = 10;
+        private static int score = 0;
         private static int[,] board = new int[boardHeight, boardWidth];
 
         static void DrawXY(int left, int top, char c)
         {
             Console.SetCursorPosition(left, top);
             Console.Write(c);
+        }
+
+        static void DrawXY(int left, int top, string s)
+        {
+            Console.SetCursorPosition(left, top);
+            Console.Write(s);
         }
 
         static void DrawBorders()
@@ -64,6 +71,17 @@ namespace ConsoleGame
             Console.SetCursorPosition(10, 10);
         }
 
+        static void Draw()
+        {
+            DrawBoard();
+            DrawScore();
+        }
+
+        static void DrawScore()
+        {
+            DrawXY(boardWidth + 3, 0, $"Score: {score}");
+        }
+
         static char GetSymbol(int number)
         {
             // 0 - Empty
@@ -106,6 +124,7 @@ namespace ConsoleGame
                 case ConsoleKey.UpArrow:
                     if(board[currentTop - 1, currentLeft] == 3)
                     {
+                        score++;
                         CreateBonus();
                         BonusEatSound();
                     }
@@ -118,6 +137,7 @@ namespace ConsoleGame
                 case ConsoleKey.DownArrow:
                     if (board[currentTop + 1, currentLeft] == 3)
                     {
+                        score++;
                         CreateBonus();
                         BonusEatSound();
                     }
@@ -130,6 +150,7 @@ namespace ConsoleGame
                 case ConsoleKey.LeftArrow:
                     if (board[currentTop, currentLeft - 1] == 3)
                     {
+                        score++;
                         CreateBonus();
                         BonusEatSound();
                     }
@@ -142,6 +163,7 @@ namespace ConsoleGame
                 case ConsoleKey.RightArrow:
                     if (board[currentTop, currentLeft + 1] == 3)
                     {
+                        score++;
                         CreateBonus();
                         BonusEatSound();
                     }
@@ -180,20 +202,18 @@ namespace ConsoleGame
         {
             Console.CursorVisible = false;
 
-            DrawBorders();
-
             CreateObstacles(obstacleCount);
             CreateBonus();
 
             // Define player
             board[currentTop, currentLeft] = 1;
 
-            DrawBoard();
+            DrawBorders();
 
             do
             {
+                Draw();
                 Update();
-                DrawBoard();
             } while (true);
         }
     }
