@@ -15,6 +15,12 @@ namespace ConsoleGame
         private static int score = 0;
         private static int[,] board = new int[boardHeight, boardWidth];
 
+        static void Draw()
+        {
+            DrawBoard();
+            DrawScore();
+        }
+
         static void DrawXY(int left, int top, char c)
         {
             Console.SetCursorPosition(left, top);
@@ -71,12 +77,6 @@ namespace ConsoleGame
             Console.SetCursorPosition(10, 10);
         }
 
-        static void Draw()
-        {
-            DrawBoard();
-            DrawScore();
-        }
-
         static void DrawScore()
         {
             DrawXY(boardWidth + 3, 0, $"Score: {score}");
@@ -122,7 +122,7 @@ namespace ConsoleGame
             switch (input.Key)
             {
                 case ConsoleKey.UpArrow:
-                    if(board[currentTop - 1, currentLeft] == 3)
+                    if(currentTop > 0 && board[currentTop - 1, currentLeft] == 3)
                     {
                         score++;
                         CreateBonus();
@@ -135,7 +135,7 @@ namespace ConsoleGame
                     }
                     break;
                 case ConsoleKey.DownArrow:
-                    if (board[currentTop + 1, currentLeft] == 3)
+                    if (currentTop < boardHeight - 1 && board[currentTop + 1, currentLeft] == 3)
                     {
                         score++;
                         CreateBonus();
@@ -148,7 +148,7 @@ namespace ConsoleGame
                     }
                     break;
                 case ConsoleKey.LeftArrow:
-                    if (board[currentTop, currentLeft - 1] == 3)
+                    if (currentLeft > 0 && board[currentTop, currentLeft - 1] == 3)
                     {
                         score++;
                         CreateBonus();
@@ -161,7 +161,7 @@ namespace ConsoleGame
                     }
                     break;
                 case ConsoleKey.RightArrow:
-                    if (board[currentTop, currentLeft + 1] == 3)
+                    if (currentLeft < boardWidth - 1 && board[currentTop, currentLeft + 1] == 3)
                     {
                         score++;
                         CreateBonus();
