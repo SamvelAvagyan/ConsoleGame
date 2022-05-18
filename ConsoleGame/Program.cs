@@ -5,6 +5,14 @@ namespace ConsoleGame
     class Program
     {
         private static Random random = new Random();
+        private static int boardWidth = 30;
+        private static int boardHeight = 20;
+        private static int startLeft = boardWidth / 2;
+        private static int startTop = boardHeight / 2;
+        private static int currentTop = startTop;
+        private static int currentLeft = startLeft;
+        private static int obstacleCount = 10;
+        private static int[,] board = new int[boardHeight, boardWidth];
 
         static void DrawXY(int left, int top, char c)
         {
@@ -12,7 +20,7 @@ namespace ConsoleGame
             Console.Write(c);
         }
 
-        static void DrawBorders(int boardWidth, int boardHeight)
+        static void DrawBorders()
         {
             for (int i = 0; i < boardWidth + 2; i++)
             {
@@ -27,7 +35,7 @@ namespace ConsoleGame
             }
         }
 
-        static void DrawBoard(int[,] board)
+        static void DrawBoard()
         {
             int boardHeight = board.GetLength(0);
             int boardWidth = board.GetLength(1);
@@ -82,12 +90,10 @@ namespace ConsoleGame
 
         static void BonusEatSound()
         {
-            Console.Beep(100, 100);
-            Console.Beep(200, 100);
-            Console.Beep(300, 200);
+            Console.Beep(300, 100);
         }
 
-        static void Update(int[,] board, ref int currentLeft, ref int currentTop)
+        static void Update()
         {
             int boardHeight = board.GetLength(0);
             int boardWidth = board.GetLength(1);
@@ -100,7 +106,7 @@ namespace ConsoleGame
                 case ConsoleKey.UpArrow:
                     if(board[currentTop - 1, currentLeft] == 3)
                     {
-                        CreateBonus(board);
+                        CreateBonus();
                         BonusEatSound();
                     }
 
@@ -112,7 +118,7 @@ namespace ConsoleGame
                 case ConsoleKey.DownArrow:
                     if (board[currentTop + 1, currentLeft] == 3)
                     {
-                        CreateBonus(board);
+                        CreateBonus();
                         BonusEatSound();
                     }
 
@@ -124,7 +130,7 @@ namespace ConsoleGame
                 case ConsoleKey.LeftArrow:
                     if (board[currentTop, currentLeft - 1] == 3)
                     {
-                        CreateBonus(board);
+                        CreateBonus();
                         BonusEatSound();
                     }
 
@@ -136,7 +142,7 @@ namespace ConsoleGame
                 case ConsoleKey.RightArrow:
                     if (board[currentTop, currentLeft + 1] == 3)
                     {
-                        CreateBonus(board);
+                        CreateBonus();
                         BonusEatSound();
                     }
 
@@ -152,14 +158,14 @@ namespace ConsoleGame
             board[currentTop, currentLeft] = 1;
         }
 
-        static void CreateBonus(int[,] board)
+        static void CreateBonus()
         {
             int boardHeight = board.GetLength(0);
             int boardWidth = board.GetLength(1);
             board[random.Next(0, boardHeight), random.Next(0, boardWidth)] = 3;
         }
 
-        static void CreateObstacles(int[,] board, int count)
+        static void CreateObstacles(int count)
         {
             int boardHeight = board.GetLength(0);
             int boardWidth = board.GetLength(1);
@@ -172,31 +178,22 @@ namespace ConsoleGame
 
         static void Main(string[] args)
         {
-            int boardWidth = 30;
-            int boardHeight = 20;
-            int startLeft = boardWidth / 2;
-            int startTop = boardHeight / 2;
-            int currentTop = startTop;
-            int currentLeft = startLeft;
-            int obstacleCount = 10;
-            int[,] board = new int[boardHeight, boardWidth];
-
             Console.CursorVisible = false;
 
-            DrawBorders(boardWidth, boardHeight);
+            DrawBorders();
 
-            CreateObstacles(board, obstacleCount);
-            CreateBonus(board);
+            CreateObstacles(obstacleCount);
+            CreateBonus();
 
             // Define player
             board[currentTop, currentLeft] = 1;
 
-            DrawBoard(board);
+            DrawBoard();
 
             do
             {
-                Update(board, ref currentLeft, ref currentTop);
-                DrawBoard(board);
+                Update();
+                DrawBoard();
             } while (true);
         }
     }
