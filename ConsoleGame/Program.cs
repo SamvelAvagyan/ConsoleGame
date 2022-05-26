@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Timers;
 
 namespace ConsoleGame
 {
     class Program
     {
         private static Random random = new Random();
+        private static Timer timer = new Timer();
+
         private static int boardWidth = 30;
         private static int boardHeight = 20;
         private static int startLeft = boardWidth / 2;
@@ -13,12 +16,16 @@ namespace ConsoleGame
         private static int currentLeft = startLeft;
         private static int obstacleCount = 10;
         private static int score = 0;
+        private static int remainingTime = 10;
+        private static bool isGameRunning = true;
+        private static int winningScore = 3;
         private static int[,] board = new int[boardHeight, boardWidth];
 
         static void Draw()
         {
             DrawBoard();
             DrawScore();
+            DrawTimer();
         }
 
         static void DrawXY(int left, int top, char c)
@@ -82,6 +89,11 @@ namespace ConsoleGame
             DrawXY(boardWidth + 3, 0, $"Score: {score}");
         }
 
+        static void DrawTimer()
+        {
+            DrawXY(boardWidth + 3, 2, $"Time: {remainingTime}");
+        }
+
         static char GetSymbol(int number)
         {
             // 0 - Empty
@@ -113,8 +125,10 @@ namespace ConsoleGame
 
         static void Update()
         {
-            int boardHeight = board.GetLength(0);
-            int boardWidth = board.GetLength(1);
+            if (!Console.KeyAvailable)
+            {
+                return;
+            }
 
             var input = Console.ReadKey();
             board[currentTop, currentLeft] = 0;
@@ -198,9 +212,10 @@ namespace ConsoleGame
             }
         }
 
-        static void Main(string[] args)
+        static async void Main(string[] args)
         {
             Console.CursorVisible = false;
+            DrawBorders();
 
             CreateObstacles(obstacleCount);
             CreateBonus();
@@ -208,13 +223,42 @@ namespace ConsoleGame
             // Define player
             board[currentTop, currentLeft] = 1;
 
-            DrawBorders();
+            timer.Elapsed += Timer_Elapsed;
+            timer.Interval = 1000;
+            timer.Start();
 
             do
             {
-                Draw();
-                Update();
+                if (isGameRunning)
+                {
+                    Draw();
+                    Update();
+                }
             } while (true);
+        }
+
+        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        { 
+            if(remainingTime > 0)
+            {
+                remainingTime--;
+            }
+            else
+            {
+                isGameRunning = false;
+                Console.Clear();
+                if(score >= 3)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    DrawXY(0, 0, "You Won!");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    DrawXY(0, 0, "You Lost!");
+                }
+                Console.ResetColor();
+            }
         }
     }
 }
